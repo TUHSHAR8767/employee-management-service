@@ -1,71 +1,35 @@
-package com.example.employeemanagement.entity;
+package com.example.employeemanagement.dto;
 
 import java.time.LocalDate;
 import java.util.List;
 
+import jakarta.validation.constraints.*;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.ManyToMany;
-import jakarta.validation.constraints.DecimalMax;
-import jakarta.validation.constraints.DecimalMin;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
+public class EmployeeDTO {
 
-
-@Entity
-public class Employee {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    
-    @NotBlank
+
+    @NotBlank(message = "Name is required") 
     private String name;
-    
-    @Email
+
+    @Email(message = "Invalid email") 
     private String email;
-    
-    @NotBlank
+
     private String position;
     private String gender;
-
     private LocalDate birthDate;
     private LocalDate recruitmentDate;
 
-    @DecimalMin("0.0")
-    @DecimalMax("100.0")
-    private Double score;
-    
-
-	@NotNull
+    @NotNull(message = "Salary is required") 
     private Double salary;
 
     private String team;
 
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(
-        name = "employee_project",
-        joinColumns = @JoinColumn(name = "employee_id"),
-        inverseJoinColumns = @JoinColumn(name = "project_id")
-    )
-    private List<Project> projects;;
-    
-    
-    public Double getScore() {
-		return score;
-	}
+    @DecimalMin(value = "0.0", message = "Score must be >= 0")
+    @DecimalMax(value = "100.0", message = "Score must be <= 100")
+    private Double score;
 
-	public void setScore(Double score) {
-		this.score = score;
-	}
-
+    private List<Long> projectIds;
 
 	public Long getId() {
 		return id;
@@ -139,14 +103,20 @@ public class Employee {
 		this.team = team;
 	}
 
-	
-	public List<Project> getProjects() {
-		return projects;
+	public Double getScore() {
+		return score;
 	}
 
-	public void setProjects(List<Project> projects) {
-		this.projects = projects;
+	public void setScore(Double score) {
+		this.score = score;
 	}
 
-    
+	public List<Long> getProjectIds() {
+		return projectIds;
+	}
+
+	public void setProjectIds(List<Long> projectIds) {
+		this.projectIds = projectIds;
+	}
+
 }

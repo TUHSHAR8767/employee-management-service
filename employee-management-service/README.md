@@ -1,47 +1,163 @@
-# Employee Management Service
+# 🚀 Employee Management Service
 
-## Project Description
-This is a Spring Boot REST API to manage employees, projects, and assignments.
+## 📌 Project Description
 
----
-
-## Features
-- Create and fetch employees
-- Create and fetch projects
-- Assign and unassign employees to projects
-- Update employee score
-- Role-based access control (HR, PM)
+A **Spring Boot REST API** to manage employees, projects, and their assignments.
+The application follows a layered architecture with **DTOs, validation, security, and testing** to ensure clean and scalable design.
 
 ---
 
-## Technologies Used
-- Java 17
-- Spring Boot
-- Spring Data JPA
-- Spring Security
-- MySQL
+## ✨ Features
+
+### 👨‍💼 Employee Management
+
+* Create employee
+* Get all employees (with pagination)
+* Get employee by ID
+* Update employee score
+* Delete employee
+* Filter employees by:
+
+  * Name
+  * Project ID
+
+### 📁 Project Management
+
+* Create project
+* Get all projects
+
+### 🔗 Employee–Project Mapping
+
+* Assign employees to projects during creation
+* Many-to-Many relationship implemented
+
+### 🔐 Security
+
+* Role-based access control using Spring Security:
+
+  * **HR** → Manage employees
+  * **PM** → Manage projects
+* Basic Authentication enabled
+
+### ✅ Validation & Error Handling
+
+* Input validation using Jakarta Validation
+* Global exception handling with proper HTTP status codes
+
+### 🧪 Testing
+
+* Controller tests using MockMvc
+* Service layer unit tests using Mockito
+* Validation tests included
 
 ---
 
-## How to Run
-1. Install MySQL
-2. Create database:
+## 🛠️ Technologies Used
+
+* Java 17
+* Spring Boot
+* Spring Data JPA
+* Spring Security
+* MySQL
+* Hibernate
+* JUnit 5 & Mockito
+
+---
+
+## ⚙️ How to Run
+
+1. Install MySQL and create database:
+
+   ```sql
    CREATE DATABASE employee_db;
-3. Update application.properties with DB username/password
-4. Run the Spring Boot application
-5. Use Postman to test APIs
+   ```
+
+2. Update `application.properties`:
+
+   ```properties
+   spring.datasource.url=jdbc:mysql://localhost:3306/employee_db
+   spring.datasource.username=YOUR_USERNAME
+   spring.datasource.password=YOUR_PASSWORD
+   ```
+
+3. Run the application:
+
+   ```bash
+   mvn spring-boot:run
+   ```
+
+4. Access APIs using Postman or any REST client
 
 ---
 
-## Roles
-- HR → Can create employees
-- PM → Can assign/unassign employees
-- Auth → Basic authentication is used
+## 🔑 Authentication
+
+Basic Auth credentials:
+
+| Role | Username | Password |
+| ---- | -------- | -------- |
+| HR   | hr       | 123      |
+| PM   | pm       | 123      |
 
 ---
 
-## API Examples
-- POST /employees
-- GET /employees
-- POST /projects
-- POST /assign
+## 📡 API Endpoints
+
+### 👨‍💼 Employees
+
+* `POST /employees` → Create employee
+* `GET /employees?page=0&size=5` → Get all employees (paginated)
+* `GET /employees/{id}` → Get employee by ID
+* `PUT /employees/{id}/score?score=90` → Update score
+* `DELETE /employees/{id}` → Delete employee
+* `GET /employees/filter?name=abc&projectId=1` → Filter employees
+
+### 📁 Projects
+
+* `POST /projects` → Create project
+* `GET /projects` → Get all projects
+
+---
+
+## 🧱 Architecture
+
+```
+Controller → Service → Repository → Database
+```
+
+* **Controller** → Handles HTTP requests
+* **Service** → Business logic
+* **Repository** → Database operations
+
+---
+
+## 🧪 Testing Strategy
+
+| Layer      | Tool           | Description          |
+| ---------- | -------------- | -------------------- |
+| Controller | MockMvc        | API testing          |
+| Service    | Mockito        | Unit testing (no DB) |
+| Validation | SpringBootTest | Validation testing   |
+
+---
+
+## 📈 Improvements Implemented
+
+* Added DTO layer to avoid exposing entities
+* Implemented validation annotations
+* Added pagination and filtering
+* Implemented role-based security
+* Added global exception handling
+* Improved test coverage (unit + integration)
+
+---
+
+## 👨‍💻 Author
+
+**Tushar Chaudhari**
+
+---
+
+## ⭐ Final Note
+
+This project demonstrates a **production-ready backend structure** with proper layering, validation, security, and testing practices.

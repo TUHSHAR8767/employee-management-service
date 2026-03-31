@@ -2,6 +2,9 @@ package com.example.employeemanagement.controller;
 
 import com.example.employeemanagement.entity.Project;
 import com.example.employeemanagement.service.ProjectService;
+
+import jakarta.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,7 +18,7 @@ public class ProjectController {
     private ProjectService service;
 
     @PostMapping
-    public Project create(@RequestBody Project p) {
+    public Project create(@Valid @RequestBody Project p) {
         return service.create(p);
     }
 

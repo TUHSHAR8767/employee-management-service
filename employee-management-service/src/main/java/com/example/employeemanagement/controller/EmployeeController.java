@@ -1,11 +1,14 @@
 package com.example.employeemanagement.controller;
 
-import com.example.employeemanagement.entity.Employee;
+import com.example.employeemanagement.dto.EmployeeDTO;
+import com.example.employeemanagement.response.ApiResponse;
 import com.example.employeemanagement.service.EmployeeService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import jakarta.validation.Valid;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/employees")
@@ -14,28 +17,52 @@ public class EmployeeController {
     @Autowired
     private EmployeeService service;
 
+    
     @PostMapping
-    public Employee create(@RequestBody Employee e) {
-        return service.create(e);
+    public ApiResponse<EmployeeDTO> create(@Valid @RequestBody EmployeeDTO dto) {
+        EmployeeDTO saved = service.create(dto);
+        return new ApiResponse<>(true, "Employee created", saved);
     }
 
+    
     @GetMapping
-    public List<Employee> getAll() {
-        return service.getAll();
+    public ApiResponse<Page<EmployeeDTO>> getAll(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "5") int size) {
+
+        Page<EmployeeDTO> data = service.getAll(page, size);
+        return new ApiResponse<>(true, "Employee list", data);
     }
 
+    
     @GetMapping("/{id}")
-    public Employee getById(@PathVariable Long id) {
-        return service.getById(id);
+    public ApiResponse<EmployeeDTO> getById(@PathVariable Long id) {
+        return new ApiResponse<>(true, "Employee found", service.getById(id));
     }
 
-    @GetMapping("/filter")
-    public List<Employee> filter(@RequestParam String role) {
-        return service.filterByRole(role);
-    }
-
+    
     @PutMapping("/{id}/score")
-    public Employee updateScore(@PathVariable Long id, @RequestParam Double score) {
-        return service.updateScore(id, score);
+    public ApiResponse<EmployeeDTO> updateScore(
+            @PathVariable Long id,
+            @RequestParam Double score) {
+
+        return new ApiResponse<>(true, "Score updated",
+                service.updateScore(id, score));
+    }
+
+    
+    @GetMapping("/filter")
+    public ApiResponse<?> filter(
+            @RequestParam(required = false) String name,
+            @RequestParam(required = false) Long projectId) {
+
+        return new ApiResponse<>(true, "Filtered result",
+                service.filter(name, projectId));
+    }
+    
+    @DeleteMapping("/{id}")
+    public ApiResponse<String> delete(@PathVariable Long id) {
+        service.delete(id);
+        return new ApiResponse<>(true, "Employee deleted", null);
     }
 }
